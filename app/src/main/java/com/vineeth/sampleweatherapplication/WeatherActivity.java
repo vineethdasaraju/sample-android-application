@@ -38,26 +38,25 @@ public class WeatherActivity extends ActionBarActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-		/*int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);*/
-        if(item.getItemId() == R.id.change_city){
-            showInputDialog();
+        switch (item.getItemId()) {
+            case R.id.current_location:
+                goToCurrentLocation();
+                return true;
+            case R.id.change_city:
+                showInputDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return false;
-
     }
 
     private void showInputDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Change city");
+        builder.setMessage("Enter the name of the city whose weather you wish to see: ");
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
@@ -68,6 +67,12 @@ public class WeatherActivity extends ActionBarActivity {
             }
         });
         builder.show();
+    }
+
+    public void goToCurrentLocation(){
+        WeatherFragment wf = (WeatherFragment)getSupportFragmentManager()
+                .findFragmentById(R.id.container);
+        wf.updateToCurrentLocation();
     }
 
     public void changeCity(String city){

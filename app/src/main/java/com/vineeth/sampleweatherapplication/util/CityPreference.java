@@ -12,7 +12,15 @@ public class CityPreference {
         prefs = activity.getPreferences(Activity.MODE_PRIVATE);
     }
 
-    public String getCity(){
+    public static String getCurrentCity(){
+        return prefs.getString("currentCity", "default");
+    }
+
+    public static void setCurrentCity(String city){
+        prefs.edit().putString("currentCity", city).commit();
+    }
+
+    public static String getCity(){
         return prefs.getString("city", "default");
     }
 

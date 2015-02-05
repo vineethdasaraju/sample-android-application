@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 
-import com.vineeth.sampleweatherapplication.WeatherActivity;
 import com.vineeth.sampleweatherapplication.R;
+import com.vineeth.sampleweatherapplication.WeatherActivity;
 import com.vineeth.sampleweatherapplication.util.Constants;
 
 import org.json.JSONObject;
@@ -61,6 +61,7 @@ public class GetDataAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject jsonObject) {
+
         Constants.weatherData = jsonObject;
         Handler handler=new Handler();
         Runnable r=new Runnable() {

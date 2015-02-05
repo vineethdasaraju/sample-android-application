@@ -1,7 +1,10 @@
 package com.vineeth.sampleweatherapplication.Fragments;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -76,7 +79,8 @@ public class WeatherFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(currentCity.equals("")){
+                currentCity = CityPreference.getCity();
+                if(currentCity.equals("default")){
                     if(Constants.locationLongitude!=0 && Constants.locationLatitude!=0){
                         GetDataAsyncTask task = new GetDataAsyncTask(getActivity(),Constants.locationLongitude, Constants.locationLatitude);
                         task.execute();
@@ -170,5 +174,33 @@ public class WeatherFragment extends Fragment {
         CityPreference.setCity(city);
         GetDataByCityAsyncTask task = new GetDataByCityAsyncTask(getActivity(), city, currentWeatherInfo, cityField, pressureField, humidityField, currentTemperatureField, updatedField, weatherIcon);
         task.execute();
+    }
+
+    public void updateToCurrentLocation(){
+
+        Location lastKnownAddress = getLastKnownLocation();
+
+        double longitude = lastKnownAddress.getLongitude();
+        double latitude = lastKnownAddress.getLatitude();
+
+        Constants.locationLatitude = latitude;
+        Constants.locationLongitude = longitude;
+
+        GetDataAsyncTask task = new GetDataAsyncTask(getActivity(), longitude, latitude);
+        task.execute();
+    }
+
+    private Location getLastKnownLocation() {
+
+        LocationManager locationManager = (LocationManager) getActivity()
+                .getSystemService(Context.LOCATION_SERVICE);
+
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        // Or use LocationManager.GPS_PROVIDER
+
+        Location lastKnownLocation = locationManager
+                .getLastKnownLocation(locationProvider);
+
+        return lastKnownLocation;
     }
 }
