@@ -20,16 +20,17 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class GetDataByCityAsyncTask extends AsyncTask<Void, Void, JSONObject> {
+public class GetDataLatLongAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 
+    double longitude, latitude;
     Activity app;
-    String city;
-    TextView cityField, pressureField, currentTemperatureField, updatedField, weatherIcon, humidityField, currentWeatherInfo;
     ProgressDialog pd = null;
+    TextView cityField, pressureField, currentTemperatureField, updatedField, weatherIcon, humidityField, currentWeatherInfo;
 
-    public GetDataByCityAsyncTask(Activity app, String city, TextView currentWeatherInfo, TextView cityField, TextView pressureField, TextView humidityField, TextView currentTemperatureField, TextView updatedField, TextView weatherIcon) {
+    public GetDataLatLongAsyncTask(Activity app, Double longitude, Double latitude, TextView currentWeatherInfo, TextView cityField, TextView pressureField, TextView humidityField, TextView currentTemperatureField, TextView updatedField, TextView weatherIcon) {
         this.app = app;
-        this.city = city;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.cityField = cityField;
         this.pressureField = pressureField;
         this.currentTemperatureField = currentTemperatureField;
@@ -39,10 +40,12 @@ public class GetDataByCityAsyncTask extends AsyncTask<Void, Void, JSONObject> {
         this.currentWeatherInfo = currentWeatherInfo;
     }
 
+
     @Override
     protected JSONObject doInBackground(Void... params) {
         try {
-            URL url = new URL(String.format(Constants.getWeatherByCityNameAPI, city));
+            String getWeatherByCoordinates = "http://api.openweathermap.org/data/2.5/weather?lat="+latitude+"&lon="+longitude+"&units=metric";
+            URL url = new URL(getWeatherByCoordinates);
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -63,7 +66,6 @@ public class GetDataByCityAsyncTask extends AsyncTask<Void, Void, JSONObject> {
             if(data.getInt("cod") != 200){
                 return null;
             }
-
             return data;
         }catch(Exception e){
             return null;
@@ -72,7 +74,7 @@ public class GetDataByCityAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 
     @Override
     protected void onPreExecute() {
-        pd = ProgressDialog.show(app, "Please Wait!", "Updating your weather information");
+        pd = ProgressDialog.show(app,"Please wait", "Updating your weather information");
     }
 
     @Override
@@ -80,17 +82,17 @@ public class GetDataByCityAsyncTask extends AsyncTask<Void, Void, JSONObject> {
         renderWeather(jsonObject);
         pd.dismiss();
     }
-
     public void renderWeather(JSONObject json){
         try {
             String currentCity = json.getString("name").toUpperCase(Locale.US) +
                     ", " +
                     json.getJSONObject("sys").getString("country");
 
-            Constants.customLocation = currentCity;
             String bcity = new CityPreference(app).getCity();
             new CityPreference(app).setCity(currentCity);
             String acity = new CityPreference(app).getCity();
+            Constants.customLocation = currentCity;
+            Constants.homeLocation = currentCity;
             JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("main");
             String currentWeatherDetails = details.getString("description");

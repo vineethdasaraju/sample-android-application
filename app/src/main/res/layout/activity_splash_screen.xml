@@ -17,7 +17,7 @@
             android:id="@+id/splash_screen_image"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/clouds"
             android:visibility="invisible"
             android:layout_gravity="center_horizontal"/>
 
@@ -32,7 +32,6 @@
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"/>
-
         </LinearLayout>
 
 </RelativeLayout>

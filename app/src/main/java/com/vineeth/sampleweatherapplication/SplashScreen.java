@@ -57,6 +57,7 @@ public class SplashScreen extends ActionBarActivity {
             updateBasedOnLocation();
         } else {
             GetDataCustomAsyncTask task = new GetDataCustomAsyncTask(app, city);
+            Constants.customLocation = city;
             task.execute();
         }
 

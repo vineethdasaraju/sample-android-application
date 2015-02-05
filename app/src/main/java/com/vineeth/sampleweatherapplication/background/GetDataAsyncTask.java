@@ -9,12 +9,14 @@ import com.vineeth.sampleweatherapplication.R;
 import com.vineeth.sampleweatherapplication.WeatherActivity;
 import com.vineeth.sampleweatherapplication.util.Constants;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 
 public class GetDataAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 
@@ -61,6 +63,15 @@ public class GetDataAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject jsonObject) {
+
+        try {
+            Constants.homeLocation = jsonObject.getString("name").toUpperCase(Locale.US) +
+                    ", " +
+                    jsonObject.getJSONObject("sys").getString("country");
+            Constants.customLocation = Constants.homeLocation;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         Constants.weatherData = jsonObject;
         Handler handler=new Handler();

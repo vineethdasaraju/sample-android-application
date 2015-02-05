@@ -74,7 +74,7 @@ public class GetDataByCityCustomAsyncTask extends AsyncTask<Void, Void, JSONObje
 
     @Override
     protected void onPreExecute() {
-        pd = ProgressDialog.show(app, "Please Wait!", "Updating your location");
+        pd = ProgressDialog.show(app, "Please Wait!", "Updating your weather information");
     }
 
     @Override
@@ -89,7 +89,7 @@ public class GetDataByCityCustomAsyncTask extends AsyncTask<Void, Void, JSONObje
             String currentCity = json.getString("name").toUpperCase(Locale.US) +
                     ", " +
                     json.getJSONObject("sys").getString("country");
-
+            Constants.customLocation = currentCity;
             JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("main");
             String currentWeatherDetails = details.getString("description");

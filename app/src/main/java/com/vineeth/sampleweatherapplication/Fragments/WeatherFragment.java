@@ -23,6 +23,7 @@ import com.vineeth.sampleweatherapplication.R;
 import com.vineeth.sampleweatherapplication.background.GetDataAsyncTask;
 import com.vineeth.sampleweatherapplication.background.GetDataByCityAsyncTask;
 import com.vineeth.sampleweatherapplication.background.GetDataByCityCustomAsyncTask;
+import com.vineeth.sampleweatherapplication.background.GetDataLatLongAsyncTask;
 import com.vineeth.sampleweatherapplication.util.CityPreference;
 import com.vineeth.sampleweatherapplication.util.Constants;
 
@@ -79,8 +80,8 @@ public class WeatherFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                currentCity = CityPreference.getCity();
-                if(currentCity.equals("default")){
+                currentCity = new CityPreference(getActivity()).getCity();
+                if(currentCity.equals("")){
                     if(Constants.locationLongitude!=0 && Constants.locationLatitude!=0){
                         GetDataAsyncTask task = new GetDataAsyncTask(getActivity(),Constants.locationLongitude, Constants.locationLatitude);
                         task.execute();
@@ -171,12 +172,11 @@ public class WeatherFragment extends Fragment {
     }
 
     public void changeCity(String city){
-        CityPreference.setCity(city);
         GetDataByCityAsyncTask task = new GetDataByCityAsyncTask(getActivity(), city, currentWeatherInfo, cityField, pressureField, humidityField, currentTemperatureField, updatedField, weatherIcon);
         task.execute();
     }
 
-    public void updateToCurrentLocation(){
+    public void goToCurrentCity(){
 
         Location lastKnownAddress = getLastKnownLocation();
 
@@ -186,7 +186,7 @@ public class WeatherFragment extends Fragment {
         Constants.locationLatitude = latitude;
         Constants.locationLongitude = longitude;
 
-        GetDataAsyncTask task = new GetDataAsyncTask(getActivity(), longitude, latitude);
+        GetDataLatLongAsyncTask task = new GetDataLatLongAsyncTask(getActivity(), longitude, latitude, currentWeatherInfo, cityField, pressureField, humidityField, currentTemperatureField, updatedField, weatherIcon);
         task.execute();
     }
 

@@ -4,7 +4,7 @@
     tools:context=".LandingActivity" >
 
     <item
-        android:id="@+id/current_location"
+        android:id="@+id/current_city"
         android:orderInCategory="1"
         android:title="@string/my_location"
         app:showAsAction="never"/>
