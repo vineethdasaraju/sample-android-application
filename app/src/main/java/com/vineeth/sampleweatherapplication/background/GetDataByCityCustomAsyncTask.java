@@ -24,19 +24,21 @@ public class GetDataByCityCustomAsyncTask extends AsyncTask<Void, Void, JSONObje
 
     Activity app;
     String city;
-    TextView cityField, detailsField, currentTemperatureField, updatedField, weatherIcon;
+    TextView cityField, pressureField, currentTemperatureField, updatedField, weatherIcon, humidityField, currentWeatherInfo;
     ProgressDialog pd = null;
     SwipeRefreshLayout swipeLayout;
 
-    public GetDataByCityCustomAsyncTask(Activity app, SwipeRefreshLayout swipeLayout, String city, TextView cityField, TextView detailsField, TextView currentTemperatureField, TextView updatedField, TextView weatherIcon) {
+    public GetDataByCityCustomAsyncTask(Activity app, SwipeRefreshLayout swipeLayout, String city, TextView currentWeatherInfo, TextView cityField, TextView pressureField, TextView humidityField, TextView currentTemperatureField, TextView updatedField, TextView weatherIcon) {
         this.app = app;
         this.city = city;
         this.cityField = cityField;
-        this.detailsField = detailsField;
+        this.pressureField = pressureField;
         this.currentTemperatureField = currentTemperatureField;
         this.updatedField = updatedField;
         this.weatherIcon = weatherIcon;
         this.swipeLayout = swipeLayout;
+        this.humidityField = humidityField;
+        this.currentWeatherInfo = currentWeatherInfo;
     }
 
     @Override
@@ -84,23 +86,27 @@ public class GetDataByCityCustomAsyncTask extends AsyncTask<Void, Void, JSONObje
 
     public void renderWeather(JSONObject json){
         try {
-            cityField.setText(json.getString("name").toUpperCase(Locale.US) +
+            String currentCity = json.getString("name").toUpperCase(Locale.US) +
                     ", " +
-                    json.getJSONObject("sys").getString("country"));
+                    json.getJSONObject("sys").getString("country");
 
             JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("main");
-            detailsField.setText(
-                    details.getString("description").toUpperCase(Locale.US) +
-                            "\n" + "Humidity: " + main.getString("humidity") + "%" +
-                            "\n" + "Pressure: " + main.getString("pressure") + " hPa");
+            String currentWeatherDetails = details.getString("description");
+            currentWeatherInfo.setText(currentWeatherDetails);
+
+            cityField.setText(currentCity);
+
+            humidityField.setText("Humidity: " + main.getString("humidity") + "%");
+
+            pressureField.setText("Pressure: " + main.getString("pressure") + " hPa");
 
             currentTemperatureField.setText(
                     String.format("%.2f", main.getDouble("temp"))+ " ℃");
 
             DateFormat df = DateFormat.getDateTimeInstance();
             String updatedOn = df.format(new Date(json.getLong("dt")*1000));
-            updatedField.setText("Last update: " + updatedOn);
+            updatedField.setText("Last updated: " + updatedOn);
 
             setWeatherIcon(details.getInt("id"),
                     json.getJSONObject("sys").getLong("sunrise") * 1000,

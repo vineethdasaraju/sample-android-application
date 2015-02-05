@@ -1,6 +1,7 @@
 package com.vineeth.sampleweatherapplication.Fragments;
 
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,13 +32,15 @@ import java.util.Locale;
 public class WeatherFragment extends Fragment {
     Typeface weatherFont;
 
-    String currentCity="";
-    TextView cityField;
+    String currentCity="", currentWeatherDetails="";
+    TextView cityField, currentWeatherInfo;
     TextView updatedField;
-    TextView detailsField;
+    TextView pressureField, humidityField;
     TextView currentTemperatureField;
     TextView weatherIcon;
     SwipeRefreshLayout swipeLayout;
+    LinearLayout detailsContainer;
+
 
     Handler handler;
 
@@ -50,9 +54,16 @@ public class WeatherFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
         cityField = (TextView)rootView.findViewById(R.id.city_field);
         updatedField = (TextView)rootView.findViewById(R.id.updated_field);
-        detailsField = (TextView)rootView.findViewById(R.id.details_field);
+        pressureField = (TextView)rootView.findViewById(R.id.pressure_field);
+        humidityField = (TextView) rootView.findViewById(R.id.humidity_field);
         currentTemperatureField = (TextView)rootView.findViewById(R.id.current_temperature_field);
         weatherIcon = (TextView)rootView.findViewById(R.id.weather_icon);
+        detailsContainer = (LinearLayout) rootView.findViewById(R.id.details_container);
+        currentWeatherInfo = (TextView) rootView.findViewById(R.id.current_weather_information);
+
+        Drawable rightArrow = getResources().getDrawable(R.drawable.rounded_corner);
+        rightArrow.setAlpha(50);
+        detailsContainer.setBackgroundDrawable(rightArrow);
 
         weatherIcon.setTypeface(weatherFont);
         if(Constants.weatherData!=null){
@@ -71,7 +82,7 @@ public class WeatherFragment extends Fragment {
                         task.execute();
                     }
                 } else {
-                    GetDataByCityCustomAsyncTask task = new GetDataByCityCustomAsyncTask(getActivity(), swipeLayout, currentCity, cityField, detailsField, currentTemperatureField, updatedField, weatherIcon);
+                    GetDataByCityCustomAsyncTask task = new GetDataByCityCustomAsyncTask(getActivity(), swipeLayout, currentCity, currentWeatherInfo, cityField, pressureField, humidityField, currentTemperatureField, updatedField, weatherIcon);
                     task.execute();
                 }
             }
@@ -80,7 +91,7 @@ public class WeatherFragment extends Fragment {
         YoYo.with(Techniques.BounceInLeft).duration(2000).playOn(cityField);
         YoYo.with(Techniques.BounceInLeft).duration(2000).playOn(updatedField);
 
-        YoYo.with(Techniques.RollIn).duration(2000).playOn(detailsField);
+        YoYo.with(Techniques.RollIn).duration(2000).playOn(pressureField);
         YoYo.with(Techniques.BounceInDown).duration(2000).playOn(currentTemperatureField);
         YoYo.with(Techniques.BounceInDown).duration(2000).playOn(weatherIcon);
 
@@ -98,14 +109,17 @@ public class WeatherFragment extends Fragment {
             currentCity = json.getString("name").toUpperCase(Locale.US) +
                     ", " +
                     json.getJSONObject("sys").getString("country");
-            cityField.setText(currentCity);
 
             JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("main");
-            detailsField.setText(
-                    details.getString("description").toUpperCase(Locale.US) +
-                            "\n" + "Humidity: " + main.getString("humidity") + "%" +
-                            "\n" + "Pressure: " + main.getString("pressure") + " hPa");
+            currentWeatherDetails = details.getString("description");
+            currentWeatherInfo.setText(currentWeatherDetails);
+
+            cityField.setText(currentCity);
+
+            humidityField.setText("Humidity: " + main.getString("humidity") + "%");
+
+            pressureField.setText("Pressure: " + main.getString("pressure") + " hPa");
 
             currentTemperatureField.setText(
                     String.format("%.2f", main.getDouble("temp"))+ " ℃");
@@ -154,7 +168,7 @@ public class WeatherFragment extends Fragment {
 
     public void changeCity(String city){
         CityPreference.setCity(city);
-        GetDataByCityAsyncTask task = new GetDataByCityAsyncTask(getActivity(), city, cityField, detailsField, currentTemperatureField, updatedField, weatherIcon);
+        GetDataByCityAsyncTask task = new GetDataByCityAsyncTask(getActivity(), city, currentWeatherInfo, cityField, pressureField, humidityField, currentTemperatureField, updatedField, weatherIcon);
         task.execute();
     }
 }

@@ -4,5 +4,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.vineeth.sampleweatherapplication.WeatherActivity"
-    tools:ignore="MergeRootFrame"
-    android:background="@color/holo_blue" />
+    tools:ignore="MergeRootFrame"/>

@@ -4,6 +4,7 @@
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/holo_blue"
     tools:context="me.vineeth.SampleWeatherApplication.LandingActivity$PlaceholderFragment">
 
     <ScrollView
@@ -30,41 +31,63 @@
                 android:textColor="@color/white"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
+            <TextView
+                android:id="@+id/weather_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="30dp"
+                android:layout_below="@id/city_field"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="70sp"/>
+
+            <TextView
+                android:id="@+id/current_temperature_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/weather_icon"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="40sp" />
+
+            <TextView
+                android:id="@+id/current_weather_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/current_temperature_field"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="40sp" />
+
             <LinearLayout
+                android:id="@+id/details_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:orientation="vertical">
 
-
                 <TextView
-                    android:id="@+id/weather_icon"
+                    android:id="@+id/humidity_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:textColor="@color/white"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="70sp"
-                    />
-
-                <TextView
-                    android:id="@+id/current_temperature_field"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="20dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="40sp" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <TextView
-                    android:id="@+id/details_field"
+                    android:id="@+id/pressure_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/weather_icon"
+                    android:layout_below="@+id/humidity_field"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/white"
@@ -74,12 +97,13 @@
                     android:id="@+id/updated_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/city_field"
+                    android:layout_below="@+id/pressure_field"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/white"
+                    android:layout_marginBottom="20dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="13sp" />
+                    android:textSize="10sp" />
 
             </LinearLayout>
         </RelativeLayout>

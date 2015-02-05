@@ -2,4 +2,5 @@
 <resources>
     <color name="white">#FFF</color>
     <color name="holo_blue">#FF0099CC</color>
+    <color name="black">#000</color>
 </resources>
